@@ -7,7 +7,7 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "prettify": "prettier --config .prettierrc.js --write '{*.json,src/**/*.{js,ts,scss,css,html,json}}'"
+    "prettify": "prettier --config .prettierrc --write '{*.json,src/**/*.{js,ts,scss,css,html,json}}'"
   },
   "dependencies": {
     "react": "16.9.0",
