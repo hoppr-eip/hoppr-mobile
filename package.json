@@ -8,6 +8,7 @@
         "start": "react-native start",
         "test": "jest",
         "commit": "git-cz",
+        "precommit": "lint-staged",
         "prettify": "prettier --config .prettierrc --write '{*.json,src/**/*.{js,ts,scss,css,html,json}}'"
     },
     "dependencies": {
@@ -24,7 +25,9 @@
         "babel-jest": "^24.9.0",
         "commitizen": "^4.0.3",
         "conventional-changelog": "^3.1.15",
+        "husky": "^3.1.0",
         "jest": "^24.9.0",
+        "lint-staged": "^9.5.0",
         "metro-react-native-babel-preset": "^0.56.0",
         "prettier": "^1.19.1",
         "react-test-renderer": "16.9.0",
@@ -41,9 +44,15 @@
             "node"
         ]
     },
+    "lint-staged": {
+        "{*.json,src/**/*.{js,ts,scss,css,html,json}}": [
+            "prettier --config .prettierrc --write",
+            "git add"
+        ]
+    },
     "config": {
-      "commitizen": {
-          "path": "./node_modules/cz-conventional-changelog"
-      }
-  }
+        "commitizen": {
+            "path": "./node_modules/cz-conventional-changelog"
+        }
+    }
 }
