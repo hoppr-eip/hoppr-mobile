@@ -13,7 +13,8 @@
     },
     "dependencies": {
         "react": "16.9.0",
-        "react-native": "0.61.4"
+        "react-native": "0.61.4",
+        "tcomb-form-native": "^0.6.20"
     },
     "devDependencies": {
         "@babel/core": "^7.6.2",
