@@ -9,7 +9,7 @@
         "test": "jest",
         "commit": "git-cz",
         "precommit": "lint-staged",
-        "prettify": "prettier --config .prettierrc --write '{*.json,src/**/*.{js,ts,scss,css,html,json}}'"
+        "prettify": "prettier --config .prettierrc --write '{*.json,./**/*.{js,ts,scss,css,html,json,tsx}}'"
     },
     "dependencies": {
         "react": "16.9.0",
