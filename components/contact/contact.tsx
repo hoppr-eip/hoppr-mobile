@@ -3,7 +3,7 @@ import { View, Button, Text, StyleSheet } from 'react-native';
 
 import { Input } from 'react-native-elements';
 
-interface ContactForm {
+export interface ContactForm {
     name: string;
     phone: string;
     message: string;
@@ -15,7 +15,7 @@ interface State extends ContactForm {
     validate: boolean;
 }
 
-class Contact extends React.Component<any, State> {
+export class Contact extends React.Component<any, State> {
     formResult: ContactForm;
 
     inputPhoneRegex = /^(\+\d+(\s|-))?0\d(\s|-)?(\d{2}(\s|-)?){4}$/;
@@ -54,6 +54,7 @@ class Contact extends React.Component<any, State> {
                 ...this.formResult,
                 validate: true
             });
+            this.props.addContact(this.formResult);
         }
     };
 
@@ -125,5 +126,3 @@ const styles = StyleSheet.create({
         marginTop: 20
     }
 });
-
-export default Contact;
