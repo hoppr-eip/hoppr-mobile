@@ -18,8 +18,7 @@ interface State extends ContactForm {
 export class Contact extends React.Component<any, State> {
     formResult: ContactForm;
 
-    inputPhoneRegex = /^(\+\d+(\s|-))?0\d(\s|-)?(\d{2}(\s|-)?){4}$/;
-    inputNameRegex = /^[a-z ,.'-]+$/i;
+    inputPhoneRegex = /^0\d(\s|-|\/)?(\d{2}(\s|-|\/)?){4}$/;
 
     constructor(props: any) {
         super(props);
@@ -45,7 +44,7 @@ export class Contact extends React.Component<any, State> {
             this.setState({ phoneErrorMessage: 'Mauvais numéro de téléphone' });
             isError = true;
         }
-        if (!this.formResult.name.match(this.inputNameRegex)) {
+        if (this.formResult.name.length < 1) {
             this.setState({ nameErrorMessage: "Ce nom n'est pas valide" });
             isError = true;
         }
