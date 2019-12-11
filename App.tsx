@@ -15,24 +15,14 @@ import { Button } from 'react-native-elements';
 import { Contact, ContactForm } from './components/contact/contact';
 import Header from './components/header';
 
-interface State {
-    contacts: ContactForm[];
-}
-
 var DirectSms = NativeModules.DirectSms;
 
-class App extends React.Component<any, State> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            contacts: []
-        };
-    }
+class App extends React.Component<any, ContactForm> {
+    isContact = false;
 
-    addContact = (tmp: ContactForm) => {
-        this.setState(prevState => ({
-            contacts: [...prevState.contacts, tmp]
-        }));
+    addContact = (newContact: ContactForm) => {
+        this.isContact = true;
+        this.setState(newContact);
     };
 
     sendDirectSms = async () => {
@@ -50,9 +40,7 @@ class App extends React.Component<any, State> {
                 }
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                this.state.contacts.forEach(contact => {
-                    DirectSms.sendDirectSms(contact.phone, contact.message);
-                });
+                DirectSms.sendDirectSms(this.state.phone, this.state.message);
             } else {
                 console.log('SMS permission denied');
             }
@@ -70,7 +58,7 @@ class App extends React.Component<any, State> {
             padding: 60
         };
 
-        if (this.state.contacts.length !== 0) {
+        if (this.isContact === true) {
             alertButton = (
                 <Button
                     title='Je suis en danger'
