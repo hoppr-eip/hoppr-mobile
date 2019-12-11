@@ -20,18 +20,24 @@ import {
 import { Contact, ContactForm } from './components/contact/contact';
 import Header from './components/header';
 
+interface State {
+    contacts: ContactForm[];
+}
+
 var DirectSms = NativeModules.DirectSms;
 
-class App extends React.Component {
-    contacts: ContactForm[];
-
+class App extends React.Component<any, State> {
     constructor(props: any) {
         super(props);
-        this.contacts = [];
+        this.state = {
+            contacts: []
+        };
     }
 
     addContact = (tmp: ContactForm) => {
-        this.contacts.push(tmp);
+        this.setState(prevState => ({
+            contacts: [...prevState.contacts, tmp]
+        }));
     };
 
     sendDirectSms = async () => {
@@ -49,7 +55,7 @@ class App extends React.Component {
                 }
             );
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                this.contacts.forEach(contact => {
+                this.state.contacts.forEach(contact => {
                     DirectSms.sendDirectSms(contact.phone, contact.message);
                 });
             } else {
@@ -61,13 +67,23 @@ class App extends React.Component {
     };
 
     render() {
+        let alertButton = null;
+
+        if (this.state.contacts.length !== 0) {
+            alertButton = (
+                <TouchableOpacity onPress={this.sendDirectSms}>
+                    <Text>ALERT</Text>
+                </TouchableOpacity>
+            );
+        }
+
+        console.log(alertButton);
+
         return (
             <View style={{ flex: 1 }}>
                 <Header />
                 <Contact addContact={this.addContact} />
-                <TouchableOpacity onPress={this.sendDirectSms}>
-                    <Text>ALERT</Text>
-                </TouchableOpacity>
+                {alertButton}
             </View>
         );
     }
