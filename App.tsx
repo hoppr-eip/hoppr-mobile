@@ -9,13 +9,8 @@
  */
 
 import React from 'react';
-import {
-    View,
-    PermissionsAndroid,
-    TouchableOpacity,
-    NativeModules,
-    Text
-} from 'react-native';
+import { View, PermissionsAndroid, NativeModules } from 'react-native';
+import { Button } from 'react-native-elements';
 
 import { Contact, ContactForm } from './components/contact/contact';
 import Header from './components/header';
@@ -68,16 +63,27 @@ class App extends React.Component<any, State> {
 
     render() {
         let alertButton = null;
+        const buttonStyle = {
+            borderRadius: 20,
+            backgroundColor: 'red',
+            margin: 20,
+            padding: 60
+        };
 
         if (this.state.contacts.length !== 0) {
             alertButton = (
-                <TouchableOpacity onPress={this.sendDirectSms}>
-                    <Text>ALERT</Text>
-                </TouchableOpacity>
+                <Button
+                    title='Je suis en danger'
+                    buttonStyle={buttonStyle}
+                    icon={{
+                        type: 'ant-design',
+                        name: 'warning'
+                    }}
+                    onPress={this.sendDirectSms}>
+                    Je suis en danger
+                </Button>
             );
         }
-
-        console.log(alertButton);
 
         return (
             <View style={{ flex: 1 }}>
