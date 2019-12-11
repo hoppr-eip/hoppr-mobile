@@ -9,7 +9,12 @@
  */
 
 import React from 'react';
-import { View, PermissionsAndroid, NativeModules } from 'react-native';
+import {
+    View,
+    PermissionsAndroid,
+    NativeModules,
+    StyleSheet
+} from 'react-native';
 import { Button } from 'react-native-elements';
 
 import { Contact, ContactForm } from './components/contact/contact';
@@ -51,18 +56,12 @@ class App extends React.Component<any, ContactForm> {
 
     render() {
         let alertButton = null;
-        const buttonStyle = {
-            borderRadius: 20,
-            backgroundColor: 'red',
-            margin: 20,
-            padding: 60
-        };
 
         if (this.isContact === true) {
             alertButton = (
                 <Button
                     title='Je suis en danger'
-                    buttonStyle={buttonStyle}
+                    buttonStyle={styles.alertButton}
                     icon={{
                         type: 'ant-design',
                         name: 'warning'
@@ -82,5 +81,14 @@ class App extends React.Component<any, ContactForm> {
         );
     }
 }
+
+const styles = StyleSheet.create({
+    alertButton: {
+        borderRadius: 20,
+        backgroundColor: 'red',
+        margin: 20,
+        padding: 60
+    }
+});
 
 export default App;
