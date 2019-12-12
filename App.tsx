@@ -9,19 +9,86 @@
  */
 
 import React from 'react';
-import { View } from 'react-native';
+import {
+    PermissionsAndroid,
+    NativeModules,
+    StyleSheet,
+    ScrollView
+} from 'react-native';
+import { Button } from 'react-native-elements';
 
-import Contact from './components/contact/contact';
+import { Contact, ContactForm } from './components/contact/contact';
 import Header from './components/header';
-class App extends React.Component {
+
+var DirectSms = NativeModules.DirectSms;
+
+class App extends React.Component<any, ContactForm> {
+    isContact = false;
+
+    addContact = (newContact: ContactForm) => {
+        this.isContact = true;
+        this.setState(newContact);
+    };
+
+    sendDirectSms = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                'android.permission.SEND_SMS',
+                {
+                    title: 'HoppR Mobile App Sms Permission',
+                    message:
+                        'HoppR Mobile App needs access to your inbox ' +
+                        'so you can send messages in background.',
+                    buttonNeutral: 'Ask Me Later',
+                    buttonNegative: 'Cancel',
+                    buttonPositive: 'OK'
+                }
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                DirectSms.sendDirectSms(this.state.phone, this.state.message);
+            } else {
+                console.log('SMS permission denied');
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    };
+
     render() {
+        let alertButton = null;
+
+        if (this.isContact === true) {
+            alertButton = (
+                <Button
+                    title='Je suis en danger'
+                    buttonStyle={styles.alertButton}
+                    icon={{
+                        type: 'ant-design',
+                        name: 'warning'
+                    }}
+                    onPress={this.sendDirectSms}>
+                    Je suis en danger
+                </Button>
+            );
+        }
+
         return (
-            <View style={{flex: 1}}>
-                <Header/>
-                <Contact/>
-            </View>
+            <ScrollView style={{ flex: 1 }}>
+                <Header />
+                <Contact addContact={this.addContact} />
+                {alertButton}
+            </ScrollView>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    alertButton: {
+        borderRadius: 20,
+        backgroundColor: 'red',
+        margin: 20,
+        padding: 60
+    }
+});
 
 export default App;

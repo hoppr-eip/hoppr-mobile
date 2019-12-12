@@ -1,5 +1,5 @@
-import React from 'react'
-import { Image, View, StyleSheet } from 'react-native'
+import React from 'react';
+import { Image, View, StyleSheet } from 'react-native';
 
 import logoTxt from '../assets/Logo_HoppR_2_w_txt.png';
 
@@ -10,7 +10,7 @@ class Header extends React.Component {
                 <Image style={styles.logo} source={logoTxt}></Image>
             </View>
         );
-    };
+    }
 }
 
 const styles = StyleSheet.create({

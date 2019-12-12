@@ -1,35 +1,59 @@
 import React from 'react';
 import { View, Button, Text, StyleSheet } from 'react-native';
 
-import t from 'tcomb-form-native';
-const Form = t.form.Form;
+import { Input } from 'react-native-elements';
 
-const contactForm = t.struct({
-    name: t.String,
-    phone: t.String
-});
+export interface ContactForm {
+    name: string;
+    phone: string;
+    message: string;
+}
 
-class Contact extends React.Component {
-    private _form;
-    private _defaultMessage: String = "Je suis en danger";
+interface State extends ContactForm {
+    phoneErrorMessage: string;
+    nameErrorMessage: string;
+    validate: boolean;
+}
+
+export class Contact extends React.Component<any, State> {
+    formResult: ContactForm;
+
+    inputPhoneRegex = /^0\d(\s|-|\/)?(\d{2}(\s|-|\/)?){4}$/;
 
     constructor(props: any) {
         super(props);
         this.state = {
             name: '',
             phone: '',
-            message: this._defaultMessage
+            message: 'Je suis en danger',
+            phoneErrorMessage: '',
+            nameErrorMessage: '',
+            validate: false
         };
+        this.formResult = this.state;
     }
 
     addContact = () => {
-        const value = this._form.getValue();
-        if (value && value.name && value.phone) {
+        let isError = false;
+
+        this.setState({
+            nameErrorMessage: '',
+            phoneErrorMessage: ''
+        });
+        if (!this.formResult.phone.match(this.inputPhoneRegex)) {
+            this.setState({ phoneErrorMessage: 'Mauvais numéro de téléphone' });
+            isError = true;
+        }
+        if (this.formResult.name.length < 1) {
+            this.setState({ nameErrorMessage: "Ce nom n'est pas valide" });
+            isError = true;
+        }
+        if (isError == false) {
             this.setState({
-                name: value.name,
-                phone: value.phone
+                ...this.formResult,
+                validate: true
             });
-            console.log('value: ', value);
+            this.props.addContact(this.formResult);
         }
     };
 
@@ -37,10 +61,41 @@ class Contact extends React.Component {
         return (
             <View style={styles.container}>
                 <View style={styles.block}>
-                    <Form ref={c => (this._form = c)} type={contactForm} />
-                    <Button color='#35b37d' title='Submit' onPress={this.addContact} />
+                    <Text> Proche de confiance </Text>
+                    <Input
+                        errorMessage={this.state.nameErrorMessage}
+                        onChangeText={name => (this.formResult.name = name)}
+                        placeholder='Nom'
+                        leftIcon={{
+                            type: 'font-awesome',
+                            name: 'user'
+                        }}
+                    />
+                    <Input
+                        errorMessage={this.state.phoneErrorMessage}
+                        onChangeText={phone => (this.formResult.phone = phone)}
+                        placeholder='Numéro de téléphone'
+                        keyboardType='number-pad'
+                        leftIcon={{
+                            type: 'font-awesome',
+                            name: 'phone'
+                        }}
+                    />
+                    <Input
+                        disabled
+                        placeholder={this.state.message}
+                        leftIcon={{
+                            type: 'font-awesome',
+                            name: 'comment'
+                        }}
+                    />
+                    <Button
+                        color='#35b37d'
+                        title='Ajouter'
+                        onPress={this.addContact}
+                    />
                 </View>
-                {this.state.name && this.state.phone ? (
+                {this.state.validate == true ? (
                     <View style={[styles.contact, styles.block]}>
                         <Text>Contact Name: {this.state.name}</Text>
                         <Text>Phone Number: {this.state.phone}</Text>
@@ -55,7 +110,7 @@ class Contact extends React.Component {
 const styles = StyleSheet.create({
     container: {
         marginLeft: 30,
-        marginRight: 30,
+        marginRight: 30
     },
     block: {
         paddingTop: 10,
@@ -70,5 +125,3 @@ const styles = StyleSheet.create({
         marginTop: 20
     }
 });
-
-export default Contact;
