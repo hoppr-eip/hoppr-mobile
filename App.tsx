@@ -10,10 +10,10 @@
 
 import React from 'react';
 import {
-    View,
     PermissionsAndroid,
     NativeModules,
-    StyleSheet
+    StyleSheet,
+    ScrollView
 } from 'react-native';
 import { Button } from 'react-native-elements';
 
@@ -73,11 +73,11 @@ class App extends React.Component<any, ContactForm> {
         }
 
         return (
-            <View style={{ flex: 1 }}>
+            <ScrollView style={{ flex: 1 }}>
                 <Header />
                 <Contact addContact={this.addContact} />
                 {alertButton}
-            </View>
+            </ScrollView>
         );
     }
 }
